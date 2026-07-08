@@ -131,6 +131,7 @@ app.UseCors();
 
 app.UseOutputCache();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
