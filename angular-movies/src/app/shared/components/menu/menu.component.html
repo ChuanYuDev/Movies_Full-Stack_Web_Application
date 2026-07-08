@@ -1,0 +1,50 @@
+<mat-toolbar class="fixed-top">
+    <span>
+        <a mat-button routerLink="/">
+            <mat-icon>theaters</mat-icon>
+            Angular movies
+        </a>
+    </span>
+
+    <div>
+        <a mat-button routerLink="/movies/search">Search movie</a>
+    </div>
+    
+    <app-authorized role="admin">
+        <ng-container authorized>
+            <div>
+                <a mat-button routerLink="/genres">Genres</a>
+            </div>
+
+            <div>
+                <a mat-button routerLink="/actors">Actors</a>
+            </div>
+
+            <div>
+                <a mat-button routerLink="/theaters">Theaters</a>
+            </div>
+
+            <div>
+                <a mat-button routerLink="/movies/create">Create movie</a>
+            </div>
+            
+            <div>
+                <a mat-button routerLink="/users">Users</a>
+            </div>
+        </ng-container>
+    </app-authorized>
+    
+    <div class="space"></div>
+    
+    <app-authorized>
+        <ng-container authorized>
+            <a mat-button disabled id="email">{{securityService.getJwtClaim("email")}}</a>
+            <button mat-button (click)="securityService.logout()">Logout</button>
+        </ng-container>
+        
+        <ng-container notAuthorized>
+            <a mat-button routerLink="/login">Login</a>
+            <a mat-button routerLink="/register">Register</a>
+        </ng-container>
+    </app-authorized>
+</mat-toolbar>

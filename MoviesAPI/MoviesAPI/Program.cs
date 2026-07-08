@@ -1,0 +1,138 @@
+using System.Text;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.IdentityModel.Tokens;
+using MoviesAPI.Utilities;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
+using Plugins.DataStore.InMemory;
+using Plugins.DataStore.SQL;
+using Plugins.FileStorage;
+using UseCases.DataStoreInterfaces;
+using UseCases.FileStorageInterfaces;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddOutputCache(options =>
+{
+    options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(60);
+});
+
+var allowedOrigins = builder.Configuration.GetValue<string>("AllowedOrigins")?.Split(",") ?? throw new InvalidOperationException("Allowed origins not found.");;
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("total-records-count");
+    });
+});
+
+if (builder.Environment.IsEnvironment("QA"))
+{
+    builder.Services.AddSingleton<IGenresRepository, GenresInMemoryRepository>();
+}
+else
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Default connection string not found.");
+    builder.Services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
+    {
+        optionsBuilder.UseSqlServer(connectionString, sqlServerOptionsBuilder =>
+        {
+            sqlServerOptionsBuilder.UseNetTopologySuite();
+        });
+    });
+
+    builder.Services.AddTransient<IGenresRepository, GenresSqlRepository>();
+    builder.Services.AddTransient<IActorsRepository, ActorsSqlRepository>();
+    builder.Services.AddTransient<ITheatersRepository, TheatersSqlRepository>();
+    builder.Services.AddTransient<IMoviesRepository, MoviesSqlRepository>();
+    builder.Services.AddTransient<IRatingsRepository, RatingsRepository>();
+    builder.Services.AddTransient<IUsersRepository, UsersSqlRepository>();
+}
+
+builder.Services.AddSingleton(NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326));
+
+// var autoMapperLicenseKey = builder.Configuration.GetValue<string>("AutoMapperLicenseKey");
+
+builder.Services.AddSingleton(provider => new MapperConfiguration(config =>
+{
+    var geometryFactory = provider.GetRequiredService<GeometryFactory>();
+    
+    config.AddProfile(new AutoMapperProfiles(geometryFactory));
+    
+    // if (autoMapperLicenseKey is not null)
+    // {
+    //     config.LicenseKey = autoMapperLicenseKey;
+    // }
+}, NullLoggerFactory.Instance).CreateMapper());
+
+builder.Services.AddTransient<IFileStorage, AzureFileStorage>();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services
+    .AddIdentityCore<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<UserManager<IdentityUser>>();
+builder.Services.AddScoped<SignInManager<IdentityUser>>();
+
+var jwtKey = builder.Configuration.GetValue<string>("JwtKey") ?? throw new InvalidOperationException("JWT key not found");
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.MapInboundClaims = false;
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ClockSkew = TimeSpan.Zero,
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("isadmin", policyBuilder =>
+    {
+        policyBuilder.RequireClaim("isadmin");
+    });
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    // app.UseSwagger();
+    // app.UseSwaggerUI();
+}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+
+app.UseCors();
+
+app.UseOutputCache();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

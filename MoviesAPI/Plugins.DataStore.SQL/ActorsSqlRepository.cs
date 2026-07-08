@@ -1,0 +1,100 @@
+using System.Linq.Expressions;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CoreBusiness;
+using CoreBusiness.DTOs;
+using Microsoft.EntityFrameworkCore;
+using UseCases.DataStoreInterfaces;
+using UseCases.FileStorageInterfaces;
+
+namespace Plugins.DataStore.SQL;
+
+public class ActorsSqlRepository: BaseSqlRepository, IActorsRepository 
+{
+    private readonly IFileStorage _fileStorage;
+    private const string Container = "actors";
+
+    public ActorsSqlRepository(ApplicationDbContext context, IMapper mapper, IFileStorage fileStorage): base(context, mapper)
+    {
+        _fileStorage = fileStorage;
+    }
+
+    public async Task<int> Count()
+    {
+        return await Count<Actor>();
+    }
+
+    public async Task<List<ActorDto>> Get()
+    {
+        return await Get<Actor, ActorDto>(orderBy: a => a.Name);
+    }
+
+    public async Task<List<ActorDto>> Get(PaginationDto paginationDto)
+    {
+        return  await Get<Actor, ActorDto>(orderBy: a => a.Name, paginationDto: paginationDto);
+    }
+
+    public async Task<List<MovieActorDto>> Get(string name)
+    {
+        return await Get<Actor, MovieActorDto>(orderBy: a => a.Name, where: a => a.Name.Contains(name));
+    }
+
+    public async Task<ActorDto?> Get(int id)
+    {
+        return await Get<Actor, ActorDto>(id);
+    }
+
+    public async Task<ActorDto> Add(ActorCreationDto actorCreationDto)
+    {
+        var actor = Mapper.Map<Actor>(actorCreationDto);
+        
+        if (actorCreationDto.Picture is not null)
+        {
+            var url = await _fileStorage.Store(Container, actorCreationDto.Picture);
+            actor.Picture = url;
+        }
+
+        Context.Add(actor);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<ActorDto>(actor);
+    }
+
+    public async Task<bool> Update(int id, ActorCreationDto actorCreationDto)
+    {
+        var actor = await Context.Actors.FirstOrDefaultAsync(a => a.Id == id);
+
+        if (actor is null)
+        {
+            return false;
+        }
+        
+        Mapper.Map(actorCreationDto, actor);
+
+        if (actorCreationDto.Picture is not null)
+        {
+            actor.Picture = await _fileStorage.Edit(actor.Picture, Container, actorCreationDto.Picture);
+        }
+
+        await Context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> Delete(int id)
+    {
+        var actor = await Context.Actors.FirstOrDefaultAsync(a => a.Id == id);
+
+        if (actor is null)
+        {
+            return false;
+        }
+
+        Context.Remove(actor);
+        await Context.SaveChangesAsync();
+        await _fileStorage.Delete(actor.Picture, Container);
+
+        return true;
+    }
+
+}

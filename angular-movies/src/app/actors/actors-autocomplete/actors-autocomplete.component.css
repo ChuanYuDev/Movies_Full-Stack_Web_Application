@@ -1,0 +1,16 @@
+app-image {
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+td mat-form-field {
+    margin: 10px 0;
+}
+
+mat-icon {
+    cursor: pointer;
+}
+
+table {
+    margin-bottom: 2rem;
+}

@@ -1,0 +1,17 @@
+<h2>Edit Movie</h2>
+
+@if (movieDto) {
+    <app-display-errors [errors]="errors"></app-display-errors>
+    <app-movies-form
+        [selectedGenres]="selectedGenres"
+        [nonSelectedGenres]="nonSelectedGenres"
+        [selectedTheaters]="selectedTheaters"
+        [nonSelectedTheaters]="nonSelectedTheaters"
+        [selectedActors]="selectedActors"
+        [model]="movieDto"
+        (postForm)="saveChanges($event)"
+    >
+    </app-movies-form>
+} @else {
+    <app-loading></app-loading>
+}

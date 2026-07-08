@@ -1,0 +1,7 @@
+.input-container input {
+    display: none;
+}
+
+.input-container {
+    margin-bottom: 1rem;
+}
