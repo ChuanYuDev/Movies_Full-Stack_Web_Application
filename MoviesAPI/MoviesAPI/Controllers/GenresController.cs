@@ -1,4 +1,3 @@
-using CoreBusiness;
 using CoreBusiness.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

@@ -1,9 +1,6 @@
-using CoreBusiness.DTOs;
 using CoreBusiness.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using MoviesAPI.Utilities;
-using UseCases.DataStoreInterfaces;
 
 namespace MoviesAPI.Controllers;
 

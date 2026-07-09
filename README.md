@@ -1,6 +1,6 @@
 # Movies Full-Stack Web Application
 ## Description
-- Movies Full-Stack Web Application is a portfolio project designed to demonstrate end-to-end full-stack development with **an Angular frontend, Firebase hosting, an ASP.NET Core backend, SQL Server data persistence, JWT-based authentication, role-based authorization, Azure cloud deployment with CI/CD pipelines**.
+- Movies Full-Stack Web Application is a portfolio project designed to demonstrate end-to-end full-stack development with **an Angular frontend, Firebase hosting, an ASP.NET Core backend, SQL Server data persistence, JWT-based authentication, role-based authorization, Azure cloud deployment with Azure DevOps pipelines**.
 
 - The application allows all users to browse movie-related information, registered users to rate movies and administrators to manage data for genres, actors, theaters, and movies.
 
@@ -52,7 +52,7 @@
 
     ![](./images/app_functions/landing_page_admin.png)
 
-- Examine the movie details
+- View movie details
 
     ![](./images/app_functions/movie_details.png)
 
@@ -70,7 +70,7 @@
 
     ![](./images/app_functions/movie_rating_2.png)
 
-- Manage genres, actors, theaters, and movies when logged in as admin
+- Manage genres, actors, theaters, and movies when logged in as an admin
 
     ![](./images/app_functions/genres.png)
 
