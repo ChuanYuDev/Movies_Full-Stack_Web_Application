@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.17" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
         <PackageReference Include="MSTest" Version="3.6.4"/>
     </ItemGroup>
@@ -18,6 +19,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CoreBusiness\CoreBusiness.csproj" />
+      <ProjectReference Include="..\MoviesAPI\MoviesAPI.csproj" />
+      <ProjectReference Include="..\Plugins.DataStore.SQL\Plugins.DataStore.SQL.csproj" />
     </ItemGroup>
 
 </Project>
