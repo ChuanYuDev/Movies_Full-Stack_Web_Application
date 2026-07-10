@@ -1,4 +1,6 @@
 using CoreBusiness;
+using CoreBusiness.DTOs;
+using Microsoft.EntityFrameworkCore;
 using Plugins.DataStore.SQL;
 
 namespace MoviesAPITests.SqlRepositories;
@@ -67,5 +69,21 @@ public class GenresSqlRepositoryTests: TestBase
         
         // Verification
         Assert.AreEqual(expected: id, actual: response?.Id);
+    }
+
+    [TestMethod]
+    public async Task Post_ShouldCreateGenre_WhenWeSendGenre()
+    {
+        var nameDb = Guid.NewGuid().ToString();
+        var context = BuildContext(nameDb);
+        var mapper = ConfigureAutoMapper();
+        
+        var genresSqlRepository = new GenresSqlRepository(context, mapper);
+
+        await genresSqlRepository.Add(new GenreCreationDto { Name = "new genre" });
+        
+        var context2 = BuildContext(nameDb);
+        var count = await context2.Genres.CountAsync();
+        Assert.AreEqual(expected: 1, actual: count);
     }
 }
