@@ -7,11 +7,13 @@ namespace MoviesAPITests;
 public sealed class FirstLetterUppercaseAttributeTests
 {
     [TestMethod]
-    public void IsValid_ShouldReturnSuccess_WhenValueIsEmpty()
+    [DataRow("")]
+    [DataRow("      ")]
+    [DataRow(null)]
+    public void IsValid_ShouldReturnSuccess_WhenValueIsEmptyOrNull(string value)
     {
         // Preparation
         var firstLetterUppercaseAttribute = new FirstLetterUppercaseAttribute();
-        var value = string.Empty;
         var validationContext = new ValidationContext(new object());
         
         // Testing
