@@ -29,9 +29,8 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;
   &lt;PhysicalFolder Path="/Users/chuanyu/Library/CloudStorage/Dropbox/Code/ChuanYuDev/full_stack/angular_net/MoviesAPI" Loaded="True" /&gt;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=17316696_002Da970_002D4e18_002Db4aa_002Dc84e72324af0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FirstLetterUppercaseAttributeTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Project Location="/Users/chuanyu/Library/CloudStorage/Dropbox/Code/ChuanYuDev/full_stack/angular_net/MoviesAPI/MoviesAPITests" Presentation="&amp;lt;MoviesAPITests&amp;gt;" /&gt;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=37f2d058_002D2658_002D4f6c_002D834b_002D1f750c723bdf/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Get_ShouldReturnTwoGenres_GivenAMovieWithTwoGenres" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=906a65b4_002Df037_002D4b7a_002D89c9_002Ddd30cef278b6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Post_ShouldInvokeEvictByTagAsync_WhenWeSendGenre" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/chuanyu/Library/CloudStorage/Dropbox/Code/ChuanYuDev/full_stack/angular_net/MoviesAPI/MoviesAPITests" Presentation="&amp;lt;MoviesAPITests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
