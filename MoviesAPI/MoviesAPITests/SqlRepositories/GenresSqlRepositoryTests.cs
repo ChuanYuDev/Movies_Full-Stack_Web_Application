@@ -6,7 +6,7 @@ using Plugins.DataStore.SQL;
 namespace MoviesAPITests.SqlRepositories;
 
 [TestClass]
-public class GenresSqlRepositoryTests: TestBase
+public sealed class GenresSqlRepositoryTests: TestBase
 {
     [TestMethod]
     public async Task Get_ReturnsAllOfTheGenres()

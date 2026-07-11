@@ -73,6 +73,14 @@ public class MoviesSqlRepository: BaseSqlRepository, IMoviesRepository
             .AsSplitQuery()
             .ProjectTo<MovieDetailsDto>(Mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(m => m.Id == id);
+        
+        // For testing the false positive 
+        // var movie = await Context.Movies
+        //     .Include(m => m.MoviesGenres)
+        //     .ThenInclude(mg => mg.Genre)
+        //     .FirstOrDefaultAsync(m => m.Id == id);
+        //
+        // return Mapper.Map<MovieDetailsDto>(movie);
     }
 
     public async Task<MovieDto> Add(MovieCreationDto movieCreationDto)
