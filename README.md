@@ -23,9 +23,11 @@
 
     ![](./images/deployment/azure_app_service.png)
 
-- Backend build and deploy: Azure DevOps pipelines
+- Backend build, test, and deployment: Azure DevOps pipelines
 
     ![](./images/deployment/pipeline_build_deploy.png)
+
+    ![](./images/deployment/pipeline_test.png)
 
 - Image Storage: Azure Storage 
 
